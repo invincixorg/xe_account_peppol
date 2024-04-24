@@ -1,6 +1,6 @@
 # xe_account_peppol
 
-# Supported Version of Odoo 16.0
+# Supported Version of Odoo 15.0
 
 Join the E-invoicing revolution with the PEPPOL Module for Odoo
 This add-on supercharges your ODOO ERP with:
@@ -14,4 +14,4 @@ The PEPPOL Module equips your business for the future of digital invoicing. Stre
 
 If you use ODOO and want to simplify your invoice management, the PEPPOL Module is your answer. Join the thousands of businesses using PEPPOL and take your ODOO ERP to the next level today!
 
-# Get module at: https://apps.odoo.com/apps/modules/16.0/xe_account_peppol/ 
+# Get module at: https://apps.odoo.com/apps/modules/15.0/xe_account_peppol/ 

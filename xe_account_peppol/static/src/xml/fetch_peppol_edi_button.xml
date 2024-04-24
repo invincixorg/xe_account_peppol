@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates>
+   <t t-extend="ListView.buttons" t-name="xe_account_peppol.fetch_peppol_invoices_btn">
+       <t t-jquery="button.o_list_export_xlsx" t-operation="after">
+           <button type="button" class="btn btn-primary get_sales_invoice" t-if="widget.isEnableSentInvoices and widget.isEnablePeppol">
+               Fetch PEPPOL Invoice Status
+           </button>
+       </t>
+   </t>
+   <t t-extend="ListView.buttons" t-name="xe_account_peppol.fetch_peppol_bills_btn">
+       <t t-jquery="button.o_list_export_xlsx" t-operation="after">
+           <button type="button" class="btn btn-primary get_purchase_invoice" t-if="widget.isEnableReceivedInvoices and widget.isEnablePeppol">
+               Fetch PEPPOL Received Invoices
+           </button>
+       </t>
+   </t>
+</templates>

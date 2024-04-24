@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="res_config_settings_view_form" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.inherit.xe.account.peppol</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="account.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[@id='analytic']" position="after">
+                <h2 groups="account.group_account_user">PEPPOL Electronic Document Invoicing</h2>
+                <div class="row mt16 o_settings_container" id="peppol_invoicing" groups="account.group_account_user">
+                    <div class="col-12 col-lg-12 o_setting_box"
+                         id="enable_peppol_invoicing"
+                         title="Allow sending and receiving invoices through the PEPPOL network">
+                        <div class="o_setting_left_pane">
+                            <field name="is_enable_peppol"/>
+                        </div>
+                        <div class="o_setting_right_pane">
+                            <label for="is_enable_peppol"/>
+                            <span class="fa fa-lg fa-building-o mr-2" title="Values set here are company-specific."
+                                  role="img" aria-label="Values set here are company-specific."
+                                  groups="base.group_multi_company"/>
+                            <a href="https://invoicedge.invincix.com/"
+                               title="Documentation" class="o_doc_link" target="_blank"/>
+                            <div class="text-muted">
+                                Allow sending and receiving invoices through the PEPPOL network
+                            </div>
+                            <div class="content-group"
+                                 attrs="{'invisible': [('is_enable_peppol', '=', False)]}">
+                                <div class="mt-2" invisible="0">
+                                    <label for="account_peppol_edi_api_key" class="col-lg-2 o_light_label"/>
+                                    <field name="account_peppol_edi_api_key" class="oe_inline" attrs="{'required': [('is_enable_peppol', '=', True)]}"/>
+                                </div>
+                                <div class="mt-2" invisible="0">
+                                    <div class="o_row">
+                                        <span class="oe_inline">
+                                            <field name="account_peppol_edi_mode" widget="radio" options="{'horizontal': true}"/>
+                                        </span>
+                                        <span class="text-muted">(<field name="account_peppol_verification_status"
+                                                                         nolabel="1"
+                                                                         class="oe_inline"
+                                                                         style="padding-left: 0 !important;"/>)
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="mt-2" invisible="1">
+                                    <label for="account_peppol_edi_url" class="col-lg-2 o_light_label"/>
+                                    <field name="account_peppol_edi_url" class="oe_inline"/>
+                                </div>
+                                <div class="mt-2" invisible="1">
+                                    <label for="client_id" class="col-lg-2 o_light_label"/>
+                                    <field name="client_id" class="oe_inline"/>
+                                </div>
+                                <div class="mt-2" invisible="1">
+                                    <label for="client_number" class="col-lg-2 o_light_label"/>
+                                    <field name="client_number" class="oe_inline"/>
+                                </div>
+                                <div class="mt-2" invisible="1">
+                                    <label for="peppol_endpoint" class="col-lg-2 o_light_label"/>
+                                    <field name="peppol_endpoint" class="oe_inline"/>
+                                </div>
+                                <div class="mt-2" invisible="1">
+                                    <label for="account_peppol_edi_access_token" class="col-lg-2 o_light_label"/>
+                                    <field name="account_peppol_edi_access_token" class="oe_inline"/>
+                                </div>
+                                <div class="mt-2" invisible="1">
+                                    <label for="account_peppol_edi_refresh_token" class="col-lg-2 o_light_label"/>
+                                    <field name="account_peppol_edi_refresh_token" class="oe_inline"/>
+                                </div>
+                                <div class="mt-2">
+                                    <button name="action_validate_peppol" type="object"
+                                            string="Validate" class="btn btn-primary ml-1 mr-3"
+                                            attrs="{'invisible': [('account_peppol_verification_status', '=', 'verified')]}"/>
+                                    <button name="action_regenerate_tokens" type="object"
+                                            string="Regenerate Tokens" class="btn btn-primary" invisible="1"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </xpath>
+        </field>
+    </record>
+</odoo>

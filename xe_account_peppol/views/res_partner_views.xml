@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_partner_form" model="ir.ui.view">
+            <field name="name">res.partner.form.inherit.freight</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_partner_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='vat']" position="before">
+                    <label for="peppol_endpoint"/>
+                    <div class="row">
+                        <div class="col-7">
+                            <field name="peppol_endpoint" groups="xe_account_peppol.group_peppol_invoice"/>
+                            <field name="creditor_id" invisible="1"/>
+                            <field name="creditor_number" invisible="1"/>
+                        </div>
+                        <div class="col-5 text-right">
+                            <button name="action_fetch_peppol_endpoint"
+                                    attrs="{'invisible':['|', ('id','=', False), ('peppol_endpoint','!=', False)]}"
+                                    class="oe_highlight" type="object" string="Fetch PEPPOL ID"
+                                    groups="xe_account_peppol.group_peppol_invoice"/>
+                        </div>
+                    </div>
+                </xpath>
+                <xpath expr="//field[@name='street']" position="attributes">
+                    <attribute name="required">1</attribute>
+                </xpath>
+                <xpath expr="//field[@name='zip']" position="attributes">
+                    <attribute name="required">1</attribute>
+                </xpath>
+                <xpath expr="//field[@name='city']" position="attributes">
+                    <attribute name="required">1</attribute>
+                </xpath>
+                <xpath expr="//field[@name='country_id']" position="attributes">
+                    <attribute name="required">1</attribute>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

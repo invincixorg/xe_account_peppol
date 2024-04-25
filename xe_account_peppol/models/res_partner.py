@@ -90,9 +90,10 @@ class Partner(models.Model):
             )
             json_response = json.loads(response.text)
             if not (200 <= response.status_code <= 299):
-                if json_response.get('message') == 'Invalid legal_entity_trn':
+                message = json.loads(response.text).get('message')
+                if message == 'Invalid legal_entity_trn':
                     raise AccessError('Sorry, you have entered an invalid UEN Number.')
-                if json_response.get('message') == 'legal_entity_trn is duplicated':
+                if message == 'legal_entity_trn is duplicated':
                     raise AccessError('Sorry, you have entered an UEN Number that already exists in Peppol.')
                 raise AccessError(json_response.get('message'))
         except Exception as e:
@@ -121,12 +122,4 @@ class Partner(models.Model):
             print('Token Regenerate----------------------------------------')
             response = self._make_request(url, payload, headers, method)
             print('Recursive Request Call----------------------------------')
-            return response
-        if not (200 <= response.status_code <= 299):
-            message = json.loads(response.text).get('message')
-            if not (200 <= response.status_code <= 299):
-                if message == 'Invalid legal_entity_trn':
-                    raise AccessError('Sorry, you have entered an invalid UEN Number.')
-                if message == 'legal_entity_trn is duplicated':
-                    raise AccessError('Sorry, you have entered an UEN Number that already exists in Peppol.')
         return response

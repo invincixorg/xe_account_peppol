@@ -222,10 +222,6 @@ class AccountMove(models.Model):
             print('Token Regenerate----------------------------------------')
             response = self._make_request(url, payload, headers, method)
             print('Recursive Request Call----------------------------------')
-            return response
-        if not (200 <= response.status_code <= 299):
-            message = json.loads(response.text).get('response')
-            raise AccessError(message)
         return response
 
     def _get_invoice_payload(self):

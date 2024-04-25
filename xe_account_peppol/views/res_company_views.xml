@@ -9,7 +9,11 @@
                 <xpath expr="//page[@name='general_info']/group[1]/group[2]" position="after">
                     <group string="PEPPOL Electronic Document Invoicing" invisible="1">
                         <field name="is_enable_peppol"/>
-                        <field name="account_peppol_edi_mode" attrs="{'invisible': [('is_enable_peppol', '=', False)]}"/>
+                        <field name="client_number" attrs="{'invisible': [('is_enable_peppol', '=', False)]}"/>
+                        <field name="client_id" attrs="{'invisible': [('is_enable_peppol', '=', False)]}"/>
+                        <field name="peppol_endpoint" attrs="{'invisible': [('is_enable_peppol', '=', False)]}"/>
+                        <field name="account_peppol_edi_mode"
+                               attrs="{'invisible': [('is_enable_peppol', '=', False)]}"/>
                         <field name="account_peppol_edi_url" attrs="{'invisible': [('is_enable_peppol', '=', False)]}"/>
                     </group>
                 </xpath>

@@ -32,7 +32,7 @@ class ResConfigSettings(models.TransientModel):
 
     def _get_server_url(self):
         urls = {
-            'prod': 'https://e-invoice.xprodedge.com',
+            'prod': 'https://api.invoicedge.app',
             'test': 'https://cc2c-59-153-17-41.ngrok-free.app',
         }
         return urls

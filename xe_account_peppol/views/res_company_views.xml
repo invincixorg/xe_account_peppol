@@ -14,7 +14,6 @@
                         <field name="peppol_endpoint" attrs="{'invisible': [('is_enable_peppol', '=', False)]}"/>
                         <field name="account_peppol_edi_mode"
                                attrs="{'invisible': [('is_enable_peppol', '=', False)]}"/>
-                        <field name="account_peppol_edi_url" attrs="{'invisible': [('is_enable_peppol', '=', False)]}"/>
                         <field name="account_peppol_edi_access_token" attrs="{'invisible': [('is_enable_peppol', '=', False)]}"/>
                         <field name="account_peppol_edi_refresh_token" attrs="{'invisible': [('is_enable_peppol', '=', False)]}"/>
                     </group>

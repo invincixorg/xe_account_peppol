@@ -26,24 +26,10 @@ class ResConfigSettings(models.TransientModel):
     account_peppol_edi_mode = fields.Selection(
         selection=[('test', 'Test'), ('prod', 'Live')], related='company_id.account_peppol_edi_mode', readonly=False,
     )
-    account_peppol_edi_url = fields.Char(string='PEPPOL URL', related='company_id.account_peppol_edi_url', readonly=False)
     account_peppol_edi_access_token = fields.Char(string='PEPPOL Access Token', related='company_id.account_peppol_edi_access_token', readonly=False)
     account_peppol_edi_refresh_token = fields.Char(string='PEPPOL Refresh Token', related='company_id.account_peppol_edi_refresh_token', readonly=False)
 
-    def _get_server_url(self):
-        urls = {
-            'prod': 'https://api.invoicedge.app',
-            'test': 'https://cc2c-59-153-17-41.ngrok-free.app',
-        }
-        return urls
-
-    @api.onchange('account_peppol_edi_mode')
-    def _onchange_account_peppol_edi_mode(self):
-        if self.account_peppol_edi_mode:
-            urls = self._get_server_url()
-            self.account_peppol_edi_url = urls[self.account_peppol_edi_mode]
-
-    def action_validate_peppol(self, company_id):
+    def action_validate_peppol(self, company_id=False):
         '''
         This method is to validate the company based on the API Key provided by the service provider.
         :return: Updates the access token & refresh token with the values received from the api response. Also updates the verification status.
@@ -55,7 +41,7 @@ class ResConfigSettings(models.TransientModel):
             raise ValidationError('Sorry! You have not inputted any API Key. Please contact your service provider for the API Key to access PEPPOL Network.')
         if not company_id.account_peppol_edi_mode:
             raise ValidationError('Sorry! You have not chosen PEPPOL Electronic Document Mode (Test/Live).')
-        url = company_id.account_peppol_edi_url
+        url = company_id._get_server_url()
         try:
             response = company_id._make_request(
                 f"{url}/api/v1/auth/verify-api-key",
@@ -72,9 +58,7 @@ class ResConfigSettings(models.TransientModel):
         else:
             if company_id.l10n_sg_unique_entity_number != json_response.get('uen_no'):
                 raise ValidationError('Sorry, Company UEN No. does not match. Use proper Company UEN No. to validate.')
-            if company_id.email != json_response.get('email'):
-                raise ValidationError('Sorry, Company Email does not match. Use proper Company Email to validate.')
-            company_id.write({
+            company_id.sudo().write({
                 'client_id': json_response.get('client_id'),
                 'client_number': json_response.get('client_number'),
                 'peppol_endpoint': json_response.get('peppol_id'),
@@ -93,7 +77,7 @@ class ResConfigSettings(models.TransientModel):
         :raise: AccessError: If any exception occurs
         '''
         company_id = company_id or self.env.company
-        url = company_id.account_peppol_edi_url
+        url = company_id._get_server_url()
         account_peppol_edi_refresh_token = company_id.account_peppol_edi_refresh_token
         try:
             HEADERS['Authorization'] = f'Bearer {account_peppol_edi_refresh_token}'
@@ -110,7 +94,7 @@ class ResConfigSettings(models.TransientModel):
         except Exception as e:
             raise AccessError(e)
         else:
-            company_id.write({
+            company_id.sudo().write({
                 'account_peppol_edi_access_token': json_response.get('accessToken'),
                 'account_peppol_edi_refresh_token': json_response.get('refreshToken'),
             })

@@ -43,10 +43,6 @@
                                     </div>
                                 </div>
                                 <div class="mt-2" invisible="1">
-                                    <label for="account_peppol_edi_url" class="col-lg-2 o_light_label"/>
-                                    <field name="account_peppol_edi_url" class="oe_inline"/>
-                                </div>
-                                <div class="mt-2" invisible="1">
                                     <label for="client_id" class="col-lg-2 o_light_label"/>
                                     <field name="client_id" class="oe_inline"/>
                                 </div>

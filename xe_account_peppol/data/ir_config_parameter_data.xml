@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <record id="xe_account_peppol_edi_prod_url" model="ir.config_parameter">
+        <field name="key">xe_account_peppol.edi.prod.url</field>
+        <field name="value">https://api.invoicedge.app</field>
+    </record>
+    <record id="xe_account_peppol_edi_test_url" model="ir.config_parameter">
+        <field name="key">xe_account_peppol.edi.test.url</field>
+        <field name="value">https://e-invoice.xprodedge.com</field>
+    </record>
+</odoo>

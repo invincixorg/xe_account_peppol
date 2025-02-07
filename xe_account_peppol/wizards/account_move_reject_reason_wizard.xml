@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_account_move_reject_reason_wizard_form" model="ir.ui.view">
+            <field name="name">account.move.reject.reason.wizard.form</field>
+            <field name="model">account.move.reject.reason.wizard</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="account_peppol_edi_reject_status" required="1"/>
+                                <field name="reject_reason" required="1"/>
+                            </group>
+                            <group></group>
+                        </group>
+                    </sheet>
+                    <footer>
+                        <button name="action_reject" string="Submit" type="object" class="oe_highlight"/>
+                        <button string="Cancel" class="btn-secondary" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+    </data>
+</odoo>

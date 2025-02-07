@@ -1,1 +1,2 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_account_move_reject_reason_wizard,access.account.move.reject.reason.wizard,xe_account_peppol.model_account_move_reject_reason_wizard,,1,1,1,1

@@ -9,16 +9,28 @@
                 <xpath expr="//header" position="inside">
                     <button name="action_create_invoice_on_peppol" string=" Create Invoice on PEPPOL"
                             class="btn-primary" type="object"
-                            attrs="{'invisible': ['|', ('is_enable_peppol', '=', False), '|', ('move_type', '!=', 'out_invoice'), '|', '|', ('peppol_endpoint', 'in', ('', False)), ('peppol_sales_invoice_id', '!=', False), ('state', '!=', 'posted')]}"
+                            attrs="{'invisible': ['|', ('reversal_move_id', '!=', []), '|', ('is_enable_peppol', '=', False), '|', ('move_type', '!=', 'out_invoice'), '|', '|', ('peppol_endpoint', 'in', ('', False)), ('peppol_sales_invoice_id', '!=', False), ('state', '!=', 'posted')]}"
+                            groups="xe_account_peppol.group_peppol_invoice"/>
+                    <button name="action_update_invoice_on_peppol" string="Update Invoice on PEPPOL" class="btn-primary"
+                            type="object" confirm="Are you sure you want to update the invoice on PEPPOL?"
+                            invisible="1"
+                            attrs="{'invisible': ['|', '|', '|', '|', ('is_enable_peppol', '=', False), ('move_type', '!=', 'out_invoice'), ('account_peppol_edi_status', 'not in', ('uploaded', 'unconfirmed')), ('is_send_via_peppol', '=', True), ('state', '!=', 'posted')]}"
                             groups="xe_account_peppol.group_peppol_invoice"/>
                     <button name="action_send_via_peppol" string="Send via PEPPOL" class="btn-primary" type="object"
-                            confirm="Are you sure you want to send the invoice via PEPPOL"
-                            attrs="{'invisible': ['|', '|', '|', ('is_enable_peppol', '=', False), ('move_type', '!=', 'out_invoice'), ('account_peppol_edi_status', 'not in', ('uploaded', 'unconfirmed')), ('is_send_via_peppol', '=', True)]}"
+                            confirm="Are you sure you want to send the invoice via PEPPOL?"
+                            attrs="{'invisible': ['|', '|', '|', '|', ('is_enable_peppol', '=', False), ('move_type', 'not in', ('out_invoice', 'out_refund')), ('account_peppol_edi_status', 'not in', ('uploaded', 'unconfirmed')), ('is_send_via_peppol', '=', True), ('state', '!=', 'posted')]}"
                             groups="xe_account_peppol.group_peppol_invoice"/>
                     <button name="action_get_account_peppol_edi_status" string="Get PEPPOL Status" class="btn-primary"
                             type="object"
-                            attrs="{'invisible': ['|', '|', '|', ('is_enable_peppol', '=', False), ('move_type', '!=', 'out_invoice'), ('peppol_sales_invoice_id', '=', False), ('is_send_via_peppol', '=', False)]}"
+                            attrs="{'invisible': ['|', '|', '|', ('is_enable_peppol', '=', False), ('move_type', 'not in', ('out_invoice', 'out_refund')), ('peppol_sales_invoice_id', '=', False), ('is_send_via_peppol', '=', False)]}"
                             groups="xe_account_peppol.group_peppol_invoice"/>
+                </xpath>
+                <xpath expr="//button[@name='action_reverse']" position="attributes">
+                    <attribute name="attrs">{'invisible': ['|', '|', ('reversal_move_id', '!=', []), '&amp;',
+                        ('peppol_sales_invoice_id', '!=', False), ('account_peppol_edi_status', 'not in', ('unpaid',
+                        'partially_paid')), '|', ('move_type', 'not in', ('out_invoice', 'in_invoice')), ('state', '!=',
+                        'posted')]}
+                    </attribute>
                 </xpath>
                 <xpath expr="//button[@name='action_register_payment']" position="attributes">
                     <attribute name="attrs">{'invisible': ['|', '&amp;', ('is_enable_peppol', '=', True),
@@ -27,8 +39,19 @@
                         ('out_invoice', 'out_refund', 'in_invoice', 'in_refund', 'out_receipt', 'in_receipt'))]}
                     </attribute>
                 </xpath>
-                <xpath expr="//button[@name='button_draft']" position="attributes">
-                    <attribute name="attrs">{'invisible' : ['|', '&amp;', ('is_enable_peppol', '=', True), ('account_peppol_edi_status', '!=', False), ('show_reset_to_draft_button', '=', False)]}
+                <xpath expr="//div[@name='button_box']" position="inside">
+                    <button name="action_open_credit_note"
+                            class="oe_stat_button"
+                            icon="fa-usd"
+                            type="object"
+                            attrs="{'invisible': [('reversal_move_id', '=', [])]}"
+                            string="Credit Notes">
+                    </button>
+                </xpath>
+                <xpath expr="//field[@name='partner_id']" position="attributes">
+                    <attribute name="attrs">{'invisible': [('move_type', 'not in', ('out_invoice', 'out_refund',
+                        'in_invoice', 'in_refund', 'out_receipt', 'in_receipt'))], 'readonly': ['|',
+                        ('account_peppol_edi_status', '!=', False), ('state', 'not in', ('draft'))]}
                     </attribute>
                 </xpath>
                 <xpath expr="//field[@name='partner_id']" position="after">
@@ -42,6 +65,25 @@
                     <field name="peppol_sales_invoice_uuid" invisible="1" readonly="1" force_save="1"/>
                     <field name="is_send_via_peppol" invisible="1"/>
                     <field name="is_enable_peppol" invisible="1"/>
+                    <field name="reversal_move_id" invisible="1"/>
+                </xpath>
+                <xpath expr="//form/sheet/group/group[@id='header_right_group']" position="inside">
+                    <field name="account_peppol_edi_reject_status" readonly="1" force_save="1" attrs="{'invisible': [('account_peppol_edi_reject_status', '=', False)]}"/>
+                    <field name="reject_reason" readonly="1" force_save="1"
+                           attrs="{'invisible': [('account_peppol_edi_reject_status', '=', False)]}"/>
+                </xpath>
+                <xpath expr="//notebook" position="inside">
+                    <!-- Documents -->
+                    <page name="documents" string="Documents">
+                        <group>
+                            <group>
+                                <label for="attachment_ids" string="Attachments"/>
+                                <field name='attachment_ids' string="Choose Document(s)" nolabel="1"
+                                       widget="many2many_binary"
+                                       attrs="{'readonly': [('is_send_via_peppol', '=', True)]}"/>
+                            </group>
+                        </group>
+                    </page>
                 </xpath>
             </field>
         </record>

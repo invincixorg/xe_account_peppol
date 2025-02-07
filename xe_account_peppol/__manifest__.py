@@ -18,11 +18,13 @@
     "depends": ["account"],
     "data": [
         'security/security.xml',
+        'security/ir.model.access.csv',
+        'data/ir_config_parameter_data.xml',
         'views/account_move_views.xml',
         'views/res_company_views.xml',
         'views/res_partner_views.xml',
         'views/res_config_settings.xml',
-        'security/ir.model.access.csv',
+        'wizards/account_move_reject_reason_wizard.xml',
     ],
     'assets': {
         'web.assets_backend': [
